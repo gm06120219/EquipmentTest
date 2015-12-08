@@ -5,11 +5,14 @@ import Modbus
 class ICS10(Modbus):
     def __init__(self,port="COM20",\
                  addr=1):
+        Modbus.__init(self, PORT=port)
+        self.addr = addr;
 
         pass
 
     # 获取ID
     def GetId(self):
+        self.write()
         pass
 
     # 获取干接点状态

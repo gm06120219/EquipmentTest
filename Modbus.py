@@ -39,9 +39,6 @@ class Modbus:
         for i in range(time):
             self.ser.write(data)
             sleep(delay)
+
     def flush(self):
         self.ser.flushInput()
-
-# b = Modbus(PORT="COM2",BAUDR="9600",TIMEOUT=0.05)
-# b.ser.flush()
-# b.write(str2int_list("FE FF FF FF 55 55 FE 9A"))
