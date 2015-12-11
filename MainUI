@@ -1,0 +1,44 @@
+#-*- coding: gbk -*-
+from PyQt4 import QtCore, QtGui, uic
+import sys
+from time import sleep
+from Scanwin32 import comports
+import serial
+
+
+def findCom():
+    port_list = []
+    for order, port, desc, hwid in sorted(comports()):
+        # print "%-10s: %s (%s) ->" % (port, desc, hwid)
+        try:
+            serial.Serial(port)  # test open
+            port_list.append(port)
+        except serial.serialutil.SerialException:
+            print "%scan't be openend" % port
+
+        return port_list
+
+
+class MainUI(QtGui.QMainWindow):
+
+    def __init__(self):
+        QtGui.QMainWindow.__init__(self)
+        self.ui = uic.loadUi('ui_gm_new.ui')
+        self.connect(self.ui.comboBox_ics_port, QtCore.SIGNAL(
+            "currentIndexChanged(QString)"), self.set_ics_port)
+        print type(self.ui.comboBox_ics_port)
+        # self.ui.comboBox_ics_port.clear()
+        port_list = findCom()
+        for port in port_list:
+            self.ui.comboBox_ics_port.addItem(port)
+            pass
+        self.ui.show()
+
+    def set_ics_port(self, text):
+        self.com_ics = str(text)
+        print("ICS port: " + self.com_ics)
+
+if __name__ == '__main__':
+    app = QtGui.QApplication(sys.argv)
+    ui = MainUI()
+    sys.exit(app.exec_())
